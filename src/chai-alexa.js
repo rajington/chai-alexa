@@ -3,7 +3,7 @@
 // import { skillsKitResponse } from 'alexa-schemas';
 import { get } from 'lodash';
 
-export default function (chai, utils) {
+module.exports = function chaiAlexa(chai, utils) {
   // expect(response).to.have.sessionAttributes
   // chai.use(chaiJsonSchema);
   // chai.tv4.banUnknown = true;
@@ -47,4 +47,4 @@ export default function (chai, utils) {
       );
     }
   );
-}
+};
