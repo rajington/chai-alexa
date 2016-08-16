@@ -58,6 +58,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _lodash = __webpack_require__(1);
 	
+	var stripSSML = function stripSSML(ssml) {
+	  return ssml.replace(/<\/?[^>]+>/g, '');
+	}; // import chaiJsonSchema from 'chai-json-schema';
+	// import { skillsKitResponse } from 'alexa-schemas';
+	
+	
 	module.exports = function chaiAlexa(chai, utils) {
 	  // expect(response).to.have.sessionAttributes
 	  // chai.use(chaiJsonSchema);
@@ -66,6 +72,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  chai.Assertion.overwriteMethod('phrase', function () {
 	    return function assertPhrase(phrase) {
+	      var sanitizedPhrase = stripSSML(phrase).toLowerCase();
 	      var obj = utils.flag(this, 'object');
 	
 	      // // validate response
@@ -74,7 +81,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var getResponse = function getResponse(property) {
 	        var output = (0, _lodash.get)(obj, 'response.' + property);
 	        if (output && property.includes('ssml')) {
-	          return output.replace(/<\/?[^>]+>/g, ''); // removes all SSML tags
+	          return stripSSML(output);
 	        }
 	        return output;
 	      };
@@ -83,17 +90,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var output = ['outputSpeech.text', 'outputSpeech.ssml', 'reprompt.outputSpeech.text', 'reprompt.outputSpeech.ssml', 'card.title', 'card.content', 'card.text'].map(getResponse).filter(function (response) {
 	        return response;
 	      }) // filter out nulls
-	      .join();
+	      .map(function (response) {
+	        return response.toLowerCase();
+	      }).join();
 	
 	      // TODO: better messages, e.g. where it was found
-	      this.assert(output.includes(phrase), 'expected #{this} to have phrase "#{exp}" but got #{act}', 'expected #{this} to not have phrase "#{exp}" in #{act}', phrase // expected
+	      this.assert(output.includes(sanitizedPhrase), 'expected #{this} to have phrase "#{exp}" but got #{act}', 'expected #{this} to not have phrase "#{exp}" in #{act}', sanitizedPhrase // expected
 	      , output // actual
 	      );
 	    };
 	  });
-	}; /* eslint no-underscore-dangle: ["error", { "allowAfterThis": true }]*/
-	// import chaiJsonSchema from 'chai-json-schema';
-	// import { skillsKitResponse } from 'alexa-schemas';
+	};
 
 /***/ },
 /* 1 */
