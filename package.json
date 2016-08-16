@@ -1,6 +1,6 @@
 {
   "name": "chai-alexa",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Chai.js assertions and convenience functions for testing Alexa Skills",
   "main": "dist/chai-alexa.js",
   "scripts": {
