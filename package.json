@@ -59,5 +59,8 @@
   "babelBoilerplateOptions": {
     "entryFileName": "chai-alexa.js",
     "mainVarName": "chaiAlexa"
+  },
+  "dependencies": {
+    "lodash": "^4.15.0"
   }
 }
