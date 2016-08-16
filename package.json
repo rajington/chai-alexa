@@ -10,7 +10,7 @@
     "watch": "gulp watch",
     "build": "gulp build",
     "coverage": "gulp coverage",
-    "release": "npm version patch;npm publish",
+    "release": "npm version patch;npm publish"
   },
   "repository": {
     "type": "git",
