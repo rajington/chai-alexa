@@ -2,6 +2,8 @@
 // import { skillsKitResponse } from 'alexa-schemas';
 import { get } from 'lodash';
 
+const stripSSML = ssml => ssml.replace(/<\/?[^>]+>/g, '');
+
 module.exports = function chaiAlexa(chai, utils) {
   // expect(response).to.have.sessionAttributes
   // chai.use(chaiJsonSchema);
@@ -10,6 +12,7 @@ module.exports = function chaiAlexa(chai, utils) {
 
   chai.Assertion.overwriteMethod('phrase', () =>
     function assertPhrase(phrase) {
+      const sanitizedPhrase = stripSSML(phrase).toLowerCase();
       const obj = utils.flag(this, 'object');
 
       // // validate response
@@ -18,7 +21,7 @@ module.exports = function chaiAlexa(chai, utils) {
       const getResponse = property => {
         const output = get(obj, `response.${property}`);
         if (output && property.includes('ssml')) {
-          return output.replace(/<\/?[^>]+>/g, ''); // removes all SSML tags
+          return stripSSML(output);
         }
         return output;
       };
@@ -34,15 +37,16 @@ module.exports = function chaiAlexa(chai, utils) {
         'card.text',
       ].map(getResponse)
       .filter(response => response) // filter out nulls
+      .map(response => response.toLowerCase())
       .join();
 
       // TODO: better messages, e.g. where it was found
       this.assert(
-          output.includes(phrase)
+          output.includes(sanitizedPhrase)
         , 'expected #{this} to have phrase "#{exp}" but got #{act}'
         , 'expected #{this} to not have phrase "#{exp}" in #{act}'
-        , phrase   // expected
-        , output   // actual
+        , sanitizedPhrase   // expected
+        , output            // actual
       );
     }
   );

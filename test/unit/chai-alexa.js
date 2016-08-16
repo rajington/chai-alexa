@@ -34,6 +34,10 @@ describe('chaiAlexa', () => {
       expect(response).to.have.phrase('plain text');
     });
 
+    it('should ignore case', () => {
+      expect(response).to.have.phrase('PLAIN TEXT');
+    });
+
     it('should not find phrase in sessionAttributes', () => {
       expect(response).to.not.have.phrase('session attributes text');
     });
