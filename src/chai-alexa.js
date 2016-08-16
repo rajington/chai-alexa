@@ -1,4 +1,3 @@
-/* eslint no-underscore-dangle: ["error", { "allowAfterThis": true }]*/
 // import chaiJsonSchema from 'chai-json-schema';
 // import { skillsKitResponse } from 'alexa-schemas';
 import { get } from 'lodash';
